@@ -39,6 +39,7 @@ public class ExampleMod
         MinecraftForge.EVENT_BUS.register(this);
     }
 
+    //テストブランチの設定
     private void setup(final FMLCommonSetupEvent event)
     {
         // some preinit code
