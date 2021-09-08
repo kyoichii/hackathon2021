@@ -1,9 +1,10 @@
+=======
 modLoader="javafml"
 loaderVersion="[35,)"
 license="ECC Computer College"
 issueTrackerURL="http://my.issue.tracker/"
 [[mods]]
-modId="examplemod"
+modId="hackathon"
 version="1.16.4-1.0.8"
 displayName="Hackathon Mod"
 updateJSONURL="https://www.ea.com/ja-jp"
