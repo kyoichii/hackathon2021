@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "": {
+            "model": "hackathon:block/dethbox_block"
+        }
+    }
+}
