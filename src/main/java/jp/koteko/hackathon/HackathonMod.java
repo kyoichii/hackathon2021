@@ -1,53 +1,57 @@
 package jp.koteko.hackathon;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModEnqueueEvent;
-import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
-import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
-@Mod("hackathon")
+import net.minecraft.block.AbstractBlock;
+import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.item.BlockItem;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraftforge.common.ToolType;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.fml.RegistryObject;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.ForgeRegistries;
+
+// The value here should match an entry in the META-INF/mods.toml file
+@Mod(HackathonMod.MOD_ID)
 public class HackathonMod
 {
-    private static final Logger LOGGER = LogManager.getLogger();
+    //MOD ID name
+    public static final String MOD_ID = "hackathon";
 
     public HackathonMod() {
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::enqueueIMC);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::processIMC);
-        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::doClientStuff);
-
-        MinecraftForge.EVENT_BUS.register(this);
+        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        Blocks.register(modEventBus);
+        Items.register(modEventBus);
     }
 
-    private void setup(final FMLCommonSetupEvent event)
-    {
-        LOGGER.info("SETUP START");
 
-        LOGGER.info("SETUP END");
+    public static class Blocks {
+        private static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MOD_ID);
+        public static final RegistryObject<Block> DETHBOX_BLOCK = BLOCKS.register("dethbox_block", () -> new Block(AbstractBlock.Properties
+                .create(Material.IRON)
+                .setRequiresTool()
+                .hardnessAndResistance(5.0F, 6.0F)
+                .sound(SoundType.METAL)
+                .harvestTool(ToolType.PICKAXE)
+                .harvestLevel(1)
+        ));
+
+        public static void register(IEventBus eventBus) {
+            BLOCKS.register(eventBus);
+        }
     }
 
-    private void doClientStuff(final FMLClientSetupEvent event) {
-        // do something that can only be done on the client
-    }
+    public static class Items {
+        private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MOD_ID);
+        public static final RegistryObject<Item> DETHBOX_BLOCK = ITEMS.register("dethbox_block", () -> new BlockItem(Blocks.DETHBOX_BLOCK.get(), new Item.Properties()
+                .group(ItemGroup.BUILDING_BLOCKS)));
 
-    private void enqueueIMC(final InterModEnqueueEvent event)
-    {
-        // some example code to dispatch IMC to another mod
-    }
-
-    private void processIMC(final InterModProcessEvent event)
-    {
-        // some example code to receive and process InterModComms from other mods
-    }
-
-    @SubscribeEvent
-    public void onServerStarting(FMLServerStartingEvent event) {
-        LOGGER.info("server starting");
+        public static void register(IEventBus eventBus) {
+            ITEMS.register(eventBus);
+        }
     }
 }
